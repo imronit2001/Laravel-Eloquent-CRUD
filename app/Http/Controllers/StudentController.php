@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -15,7 +16,7 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::all();
-        return view('welcome',['students'=>$students]);
+        return view('welcome', ['students' => $students]);
     }
 
     /**
@@ -26,10 +27,25 @@ class StudentController extends Controller
     public function create(Request $request)
     {
         $student = new Student;
-        $student->name = $request->name ;
-        $student->email = $request->email ;
-        $student->city = $request->city ;
-        $student->marks = $request->marks ;
+        $student->name = $request->name;
+        $student->email = $request->email;
+        $student->city = $request->city;
+        $student->marks = $request->marks;
+
+        // Multiple File Upload in public
+        if ($request->hasfile('filename')) {
+            $count = 1;
+            $filename = "";
+            foreach ($request->file('filename') as $file) {
+                $name = "Images/IMG-" . time() . "-" . ($count++) . "." . $file->getClientOriginalExtension();
+                $filename = $filename . $name . ",";
+                $file->move('Images/', $name);
+            }
+            $student->filename = $filename;
+        } else {
+            $student->filename = "";
+        }
+
         $student->save();
         return redirect((route('index')));
     }
@@ -65,7 +81,7 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = Student::find($id);
-        return view('edit',['student'=>$student]);
+        return view('edit', ['student' => $student]);
     }
 
     /**
@@ -78,10 +94,28 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $student = Student::find($id);
-        $student->name = $request->name ;
-        $student->email = $request->email ;
-        $student->city = $request->city ;
-        $student->marks = $request->marks ;
+        $student->name = $request->name;
+        $student->email = $request->email;
+        $student->city = $request->city;
+        $student->marks = $request->marks;
+        // if ($request->hasFile('filename')) {
+        //     $filename = "IMG-" . time() . "." . $request->file('filename')->getClientOriginalExtension();
+        //     $student->filename = $filename;
+        //     $request->file('filename')->storeAs('public/uploads', $filename);
+        // }
+
+        // Multiple File Upload in public
+        if ($request->hasfile('filename')) {
+            $count = 1;
+            $filename = "";
+            foreach ($request->file('filename') as $file) {
+                $name = "Images/IMG-" . time() . "-" . ($count++) . "." . $file->getClientOriginalExtension();
+                $filename = $filename . $name . ",";
+                $file->move('Images/', $name);
+            }
+            $student->filename = $filename;
+        }
+
         $student->save();
         return redirect((route('index')));
     }

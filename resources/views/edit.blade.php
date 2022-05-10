@@ -11,13 +11,15 @@
 
 <body>
     <div class="container-sm">
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <input type="text" class="form-control m-3" placeholder="Enter Your Name" name="name" value="{{$student->name}}">
             <input type="email" class="form-control m-3" placeholder="Enter Your Email" name="email" value="{{$student->email}}">
             <input type="text" class="form-control m-3" placeholder="Enter Your City" name="city" value="{{$student->city}}">
             <input type="text" class="form-control m-3" placeholder="Enter Your Marks" name="marks" value="{{$student->marks}}">
+            {{-- Multiple File Upload --}}
+            <input type="file" name="filename[]" multiple class="form-control m-3">
             <button type="submit" class="btn btn-primary m-auto">Update</button>
         </form>
     </div>
