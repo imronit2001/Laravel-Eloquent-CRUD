@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('city');
             $table->bigInteger('marks');
+            $table->string('filename');
             $table->timestamps();
         });
     }

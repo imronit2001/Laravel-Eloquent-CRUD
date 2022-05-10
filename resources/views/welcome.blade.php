@@ -11,12 +11,13 @@
 
 <body>
     <div class="container-sm">
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="text" class="form-control m-3" placeholder="Enter Your Name" name="name">
             <input type="email" class="form-control m-3" placeholder="Enter Your Email" name="email">
             <input type="text" class="form-control m-3" placeholder="Enter Your City" name="city">
             <input type="text" class="form-control m-3" placeholder="Enter Your Marks" name="marks">
+            <input type="file" name="filename" class="form-control m-3">
             <button type="submit" class="btn btn-primary m-auto">Save</button>
         </form>
     </div>
@@ -30,19 +31,29 @@
                     <th>Email</th>
                     <th>City</th>
                     <th>Marks</th>
+                    <th>File</th>
                     <th colspan="2" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($students as $stu)
                     <tr>
-                        <td>{{$stu->id}}</td>
-                        <td>{{$stu->name}}</td>
-                        <td>{{$stu->email}}</td>
-                        <td>{{$stu->city}}</td>
-                        <td>{{$stu->marks}}</td>
-                        <td class="text-center"><a href={{url('/edit',$stu->id)}}><button class="btn btn-success">Edit</button></a></td>
-                        <td class="text-center"><a href={{url('/delete',$stu->id)}}><button class="btn btn-danger">Delete</button></a></td>
+                        <td>{{ $stu->id }}</td>
+                        <td>{{ $stu->name }}</td>
+                        <td>{{ $stu->email }}</td>
+                        <td>{{ $stu->city }}</td>
+                        <td>{{ $stu->marks }}</td>
+                        @if ($stu->filename == '')
+                            <td>No Files Found</td>
+                        @else
+                            {{-- Single File Upload --}}
+                            <td><a href="{{ asset($stu->filename) }}" target="_blank"><button
+                                        class="btn btn-primary">Open File</button></a></td>
+                        @endif
+                        <td class="text-center"><a href={{ url('/edit', $stu->id) }}><button
+                                    class="btn btn-success">Edit</button></a></td>
+                        <td class="text-center"><a href={{ url('/delete', $stu->id) }}><button
+                                    class="btn btn-danger">Delete</button></a></td>
                     </tr>
                 @endforeach
             </tbody>
